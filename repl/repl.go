@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/syunta/monkey/evaluator"
 	"github.com/syunta/monkey/lexer"
+	"github.com/syunta/monkey/object"
 	"github.com/syunta/monkey/parser"
 	"io"
 )
@@ -13,6 +14,7 @@ const PROMPT = ">> "
 
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	for {
 		fmt.Print(PROMPT)
@@ -32,7 +34,7 @@ func Start(in io.Reader, out io.Writer) {
 			continue
 		}
 
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, program.String())
 			io.WriteString(out, "\n")
